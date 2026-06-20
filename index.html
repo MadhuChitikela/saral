@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SARAL — Accessibility Assistant</title>
+    <!-- Google Font for professional look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css?v=3">
+</head>
+<body>
+    <!-- Emergency Flash Overlay -->
+    <div class="emergency-flash" id="emergencyFlash"></div>
+    
+    <!-- Toast Message Alert Box -->
+    <div class="toast" id="toast"></div>
+    
+    <!-- ============================================================
+    HEADER (Initially Hidden, appears when a mode is active)
+    ============================================================ -->
+    <header id="header" style="display: none;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+            <button class="icon-btn focus-outline" onclick="goHome()" aria-label="Back to home">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            </button>
+            <button class="logo-container" onclick="goHome()" aria-label="SARAL Home">
+                <span class="icon">🧠</span>
+                <span class="brand" id="logoText">SARAL</span>
+            </button>
+        </div>
+        
+        <div class="badge-group" style="margin-left: auto; margin-right: 16px;">
+            <span class="badge-shortcut">Alt+1: Drishti</span>
+            <span class="badge-shortcut">Alt+2: Shravan</span>
+            <span class="badge-shortcut">Alt+3: Dhyan</span>
+            <span class="badge-shortcut">Alt+4: Vaani</span>
+            <span class="badge-shortcut" style="background:#fffbeb; border-color:#fde047; color:#854d0e;">🤟 SignLang (Beta)</span>
+        </div>
+        <div class="header-actions">
+            <div class="status-badge" id="statusBadge">Ready</div>
+            <button class="icon-btn focus-outline" onclick="openSettings()" aria-label="Settings">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- ============================================================
+    SCREEN 0: DEFECT / DISABILITY GATEWAY ONBOARDING
+    ============================================================ -->
+    <div class="screen active" id="screenDefect">
+        <section class="mode-selector">
+            <!-- Controls header -->
+            <div class="vision-bar" role="toolbar" aria-label="Vision accessibility controls" style="justify-content: center; margin-bottom: 24px;">
+                <span class="vision-label">🔍 Vision Assist</span>
+                <button class="vision-btn" onclick="toggleHighContrast()" id="btnContrastDefect" aria-label="Toggle high contrast">🔲 Contrast</button>
+                <button class="vision-btn" onclick="toggleInvert()" id="btnInvertDefect" aria-label="Toggle color inversion">🔄 Invert</button>
+                <button class="vision-btn" onclick="changeFontSize(-1)" aria-label="Decrease font size">A-</button>
+                <span class="vision-size" id="fontSizeLabelDefect">A</span>
+                <button class="vision-btn" onclick="changeFontSize(1)" aria-label="Increase font size">A+</button>
+            </div>
+
+            <h1>Welcome to <span>SARAL</span></h1>
+            <p class="subtitle">Tell us your accessibility needs to customize your learning experience</p>
+            
+            <div class="modes-grid" style="max-width: 750px; margin-bottom: 24px;">
+                <button class="mode-card focus-outline" onclick="handleDefect('deaf')" aria-label="Deaf or Hard of Hearing. Click to open Drishti visual mode.">
+                    <img src="assets/drishti_icon.png" alt="" class="mode-icon-img">
+                    <h3>Deaf / HoH</h3>
+                    <span>Drishti Mode (Visual)</span>
+                </button>
+                <button class="mode-card focus-outline" onclick="handleDefect('blind')" aria-label="Blind or Visually Impaired. Click to open Shravan audio mode.">
+                    <img src="assets/shravan_icon.png" alt="" class="mode-icon-img">
+                    <h3>Blind / VI</h3>
+                    <span>Shravan Mode (Audio)</span>
+                </button>
+                <button class="mode-card focus-outline" onclick="handleDefect('none')" aria-label="No disability. Click to choose learning mode manually.">
+                    <img src="assets/vaani_icon.png" alt="" class="mode-icon-img">
+                    <h3>No Disability</h3>
+                    <span>Choose Manually</span>
+                </button>
+            </div>
+
+            <!-- Text Input Group -->
+            <div class="defect-input-group" style="display: flex; justify-content: center; gap: 8px; max-width: 520px; margin: 0 auto 20px auto; width: 100%;">
+                <input type="text" id="defectTextInput" placeholder="Type your need (e.g., 'I cannot see', 'hard of hearing')" style="margin-bottom: 0; flex: 1;">
+                <button class="btn btn-primary focus-outline" onclick="submitDefectText()">Submit</button>
+            </div>
+
+            <!-- Voice Command Group (Speak Your Need) -->
+            <div class="defect-voice-group">
+                <button class="btn voice-btn focus-outline" onclick="startVoiceDefectDetection()" id="voiceDefectBtn">
+                    🎤 Speak Your Need
+                </button>
+                <span id="voiceDefectStatus" class="voice-status">Click mic and speak (e.g., "I am blind")</span>
+            </div>
+
+            <p id="defectTimerStatus" style="font-size: 0.85rem; color: var(--text-light); margin-top: 16px; font-weight: 500;">
+                ⏳ Auto-defaulting to Blind (Audio) Mode in <strong id="defectTimerCountdown">10</strong> seconds if no interaction is detected.
+            </p>
+        </section>
+    </div>
+
+    <!-- ============================================================
+    SCREEN 1: MODE SELECTOR (HOME)
+    ============================================================ -->
+    <div class="screen" id="screenHome">
+        <section class="mode-selector">
+            <!-- Controls header -->
+            <div class="vision-bar" role="toolbar" aria-label="Vision accessibility controls" style="justify-content: center; margin-bottom: 24px;">
+                <span class="vision-label">🔍 Vision Assist</span>
+                <button class="vision-btn" onclick="toggleHighContrast()" id="btnContrastHome" aria-label="Toggle high contrast">🔲 Contrast</button>
+                <button class="vision-btn" onclick="toggleInvert()" id="btnInvertHome" aria-label="Toggle color inversion">🔄 Invert</button>
+                <button class="vision-btn" onclick="changeFontSize(-1)" aria-label="Decrease font size">A-</button>
+                <span class="vision-size" id="fontSizeLabelHome">A</span>
+                <button class="vision-btn" onclick="changeFontSize(1)" aria-label="Increase font size">A+</button>
+            </div>
+
+            <h1>SARAL</h1>
+            <p class="subtitle">How do you want to learn today?</p>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-top:-20px; margin-bottom:30px;">
+                ⌨️ Keyboard navigation enabled: <strong>Alt+1</strong> (Drishti) · <strong>Alt+2</strong> (Shravan) · <strong>Alt+3</strong> (Dhyan) · <strong>Alt+4</strong> (Vaani) · <strong>Alt+H</strong> (Home)
+            </p>
+            
+            <div class="modes-grid">
+                <button class="mode-card focus-outline" onclick="startMode('drishti')" aria-label="Drishti mode: Visual access for Deaf or Hard of Hearing students">
+                    <img src="assets/drishti_icon.png" alt="" class="mode-icon-img">
+                    <h3>DRISHTI</h3>
+                    <span>Deaf / HoH · Visual</span>
+                </button>
+                <button class="mode-card focus-outline" onclick="startMode('shravan')" aria-label="Shravan mode: Auditory access for Blind or Visually Impaired students">
+                    <img src="assets/shravan_icon.png" alt="" class="mode-icon-img">
+                    <h3>SHRAVAN</h3>
+                    <span>Blind / VI · Audio Loop</span>
+                </button>
+                <button type="button" class="mode-card disabled-card focus-outline" onclick="showToast('Dhyan mode is coming soon in the next major update!')" aria-label="Dhyan mode: Coming soon">
+                    <div class="coming-soon-badge">Coming Soon</div>
+                    <img src="assets/dhyan_icon.png" alt="" class="mode-icon-img">
+                    <h3>DHYAN</h3>
+                    <span>Dyslexia · Bionic Focus</span>
+                </button>
+                <button type="button" class="mode-card disabled-card focus-outline" onclick="showToast('Vaani mode is coming soon in the next major update!')" aria-label="Vaani mode: Coming soon">
+                    <div class="coming-soon-badge">Coming Soon</div>
+                    <img src="assets/vaani_icon.png" alt="" class="mode-icon-img">
+                    <h3>VAANI</h3>
+                    <span>Motor · Voice Control</span>
+                </button>
+            </div>
+            
+            <button class="btn btn-primary" onclick="startVoiceNavigation()" style="margin-top:2rem;display:block;margin-left:auto;margin-right:auto;padding:1rem 2rem;font-size:1.1rem; border-radius:12px; box-shadow:0 10px 20px rgba(0,0,0,0.1);">🎤 Voice Navigation (For Blind Users)</button>
+            
+            <button class="skip-key" onclick="startMode('drishti')" style="margin-top:1.5rem;display:block;margin-left:auto;margin-right:auto;">Start directly with offline fallbacks →</button>
+        </section>
+    </div>
+
+    <!-- ============================================================
+    SCREEN 2: DRISHTI VIEWPORT (Deaf & HoH Interface)
+    ============================================================ -->
+    <div class="screen" id="screenDrishti">
+        <div class="drishti-layout">
+            <!-- Left: Live Transcript feed panel -->
+            <div class="drishti-feed-box" id="drishtiFeedScroll">
+                <div class="drishti-transcript">
+                    <div class="transcript-empty" id="drishtiEmptyState">
+                        <img src="assets/vaani_icon.png" alt="" style="opacity: 0.5;"><br>
+                        Click "Start Listening" below to begin live transcription<br>
+                        <small>Speaking technical words like "capacitor" or "algorithm" highlights definitions</small>
+                    </div>
+                    <div id="drishtiTranscriptList" role="log" aria-live="polite" aria-atomic="false"></div>
+                </div>
+            </div>
+            
+            <!-- Right: Sidebars for jargon definition, summaries and Sign Language -->
+            <div class="drishti-sidebar">
+                <div class="drishti-panel">
+                    <h4>📖 Jargon Buster</h4>
+                    <div class="jargon-content" id="drishtiJargonPanel">
+                        <span class="placeholder-text">Technical definitions will appear here.</span>
+                    </div>
+                </div>
+                <div class="drishti-panel">
+                    <h4>✨ Smart Summary</h4>
+                    <div class="summary-content" id="drishtiSummaryPanel" role="region" aria-live="polite" aria-atomic="true">
+                        <span class="placeholder-text">Bullet points will appear after clicking Summarize.</span>
+                    </div>
+                </div>
+                <div class="drishti-panel" style="border-top: 3px solid var(--warning); background: #fffbeb;">
+                    <h4>🤟 Sign Language Interpreter <span style="font-size:0.7rem; background:var(--warning-light); padding:2px 10px; border-radius:40px; color:#854d0e; margin-left:6px; font-weight:700;">BETA</span></h4>
+                    <div class="jargon-content" id="signLangContent" style="color:#a16207;">
+                        <span class="placeholder-text" style="color:#a16207;">🧪 Future integration: MediaPipe for real-time translation of Indian Sign Language (ISL) gestures to text/speech.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Controls footer -->
+        <div class="vision-bar" role="toolbar" aria-label="Vision accessibility controls">
+            <span class="vision-label">🔍 Vision Assist</span>
+            <button class="vision-btn" onclick="toggleHighContrast()" id="btnContrastDrishti" aria-label="Toggle high contrast">🔲 Contrast</button>
+            <button class="vision-btn" onclick="toggleInvert()" id="btnInvertDrishti" aria-label="Toggle color inversion">🔄 Invert</button>
+            <button class="vision-btn" onclick="changeFontSize(-1)" aria-label="Decrease font size">A-</button>
+            <span class="vision-size" id="fontSizeLabelDrishti">A</span>
+            <button class="vision-btn" onclick="changeFontSize(1)" aria-label="Increase font size">A+</button>
+        </div>
+        <div class="control-bar">
+            <div class="control-group-left">
+                <button class="btn btn-primary focus-outline" id="btnRecordDrishti" onclick="toggleRecording()">
+                    Start Listening
+                </button>
+                <button class="btn btn-secondary focus-outline" onclick="simulateLecture()" title="Play demo lecture to generate transcript text">
+                    📋 Play Demo
+                </button>
+                <button class="btn btn-secondary focus-outline" id="btnPushToTalkDrishti" onclick="togglePushToTalk()" title="Toggle Push-to-Talk for noisy classrooms">
+                    🔓 PTT: Off
+                </button>
+                <button class="btn btn-secondary focus-outline" id="btnSummarizeDrishti" onclick="generateSummary()" disabled>
+                    ✨ Summarize
+                </button>
+                <button class="btn btn-secondary focus-outline" onclick="speakSummary()" title="Listen to summary">
+                    🔊 Listen
+                </button>
+                <button class="btn btn-success focus-outline" onclick="saveTranscript()">
+                    💾 Save File
+                </button>
+            </div>
+            <div>
+                <button class="btn btn-danger focus-outline" onclick="triggerEmergency()">
+                    🚨 Repeat Please
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    SCREEN 3: SHRAVAN VIEWPORT (Blind & VI Interface)
+    ============================================================ -->
+    <div class="screen" id="screenShravan">
+        <div class="shravan-layout">
+
+            <!-- Voice Status Banner -->
+            <div class="shravan-voice-banner" id="shravanVoiceBanner" role="alert" aria-live="polite">
+                <div class="shravan-banner-pulse"></div>
+                <div class="shravan-banner-text">
+                    <strong>Voice Commands Active</strong>
+                    <span>Say "Start Class", "Stop", "Summarize", "Save", or "Help"</span>
+                </div>
+            </div>
+
+            <!-- Start Class Prompt (shown first when blind user enters) -->
+            <div class="shravan-start-prompt" id="shravanStartPrompt">
+                <div class="shravan-prompt-icon">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mic"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                </div>
+                <div class="shravan-prompt-content">
+                    <h2>Shall we start class?</h2>
+                    <p>Say <strong>"Yes"</strong> or <strong>"Start class"</strong> to begin the lecture session.<br>
+                    Say <strong>"Demo"</strong> to play a sample lecture to test features.</p>
+                </div>
+            </div>
+ 
+            <!-- Main Class Session Area (hidden until started) -->
+            <div class="shravan-session" id="shravanSession" style="display:none;">
+ 
+                <!-- Live Transcript Panel -->
+                <div class="shravan-transcript-panel">
+                    <div class="shravan-transcript-header">
+                        <span class="shravan-live-dot" id="shravanLiveDot"></span>
+                        <strong>Live Class Transcript</strong>
+                        <span id="shravanWordCount" style="margin-left:auto; font-size:0.8rem; color:var(--text-muted);">0 words</span>
+                    </div>
+                    <div class="shravan-transcript-body" id="shravanTranscriptBody" role="log" aria-live="polite">
+                        <p class="shravan-transcript-empty">Transcript will appear here once the class begins...</p>
+                    </div>
+                </div>
+ 
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    SCREEN 4: DHYAN VIEWPORT (Dyslexia & Focused Reading Interface)
+    ============================================================ -->
+    <div class="screen" id="screenDhyan">
+        <div class="dhyan-layout">
+            <div class="dhyan-transcript-box" id="dhyanTranscript" tabindex="0" aria-label="Lecture transcript focus view">
+                <!-- Focus guide line for dyslexia -->
+                <div class="dhyan-ruler" id="dhyanRuler"></div>
+                
+                <div class="transcript-empty" id="dhyanEmptyState">
+                    <img src="assets/vaani_icon.png" alt="" style="opacity: 0.5;"><br>
+                    Double-spaced bionic reading activated.<br>Click "Start Listening" below to begin.
+                </div>
+                <div id="dhyanTranscriptList" role="log" aria-live="polite" aria-atomic="false"></div>
+                
+                <!-- Bionic-bolded summary highlights section inside text container -->
+                <div id="dhyanSummaryPanel" class="summary-content" style="display: none; margin-top: 24px; border-top: 1px dashed var(--accent); padding-top: 18px;">
+                    <h4 style="font-size: 13px; color: var(--accent); margin-bottom: 8px; font-weight: 700; letter-spacing: 0.5px;">SUMMARY HIGHLIGHTS (BIONIC)</h4>
+                    <div id="dhyanSummaryBullets" role="region" aria-live="polite" aria-atomic="true"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Controls footer -->
+        <div class="vision-bar" role="toolbar" aria-label="Vision accessibility controls">
+            <span class="vision-label">🔍 Vision Assist</span>
+            <button class="vision-btn" onclick="toggleHighContrast()" id="btnContrastDhyan" aria-label="Toggle high contrast">🔲 Contrast</button>
+            <button class="vision-btn" onclick="toggleInvert()" id="btnInvertDhyan" aria-label="Toggle color inversion">🔄 Invert</button>
+            <button class="vision-btn" onclick="changeFontSize(-1)" aria-label="Decrease font size">A-</button>
+            <span class="vision-size" id="fontSizeLabelDhyan">A</span>
+            <button class="vision-btn" onclick="changeFontSize(1)" aria-label="Increase font size">A+</button>
+        </div>
+        <div class="control-bar">
+            <div class="control-group-left">
+                <button class="btn btn-primary focus-outline" id="btnRecordDhyan" onclick="toggleRecording()">
+                    Start Listening
+                </button>
+                <button class="btn btn-secondary focus-outline" onclick="simulateLecture()" title="Play demo lecture to generate transcript text">
+                    📋 Play Demo
+                </button>
+                <button class="btn btn-secondary focus-outline" id="btnPushToTalkDhyan" onclick="togglePushToTalk()" title="Toggle Push-to-Talk for noisy classrooms">
+                    🔓 PTT: Off
+                </button>
+                <button class="btn btn-secondary focus-outline" id="btnSummarizeDhyan" onclick="generateSummary()" disabled>
+                    ✨ Summarize
+                </button>
+                <button class="btn btn-secondary focus-outline" onclick="speakSummary()">
+                    🔊 Listen
+                </button>
+                <button class="btn btn-success focus-outline" onclick="saveTranscript()">
+                    💾 Save File
+                </button>
+                <button class="btn btn-secondary focus-outline" id="btnRulerToggle" onclick="toggleFocusRuler()">
+                    Focus Guide
+                </button>
+            </div>
+            <div>
+                <button class="btn btn-danger focus-outline" onclick="triggerEmergency()">
+                    🚨 Repeat Please
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    SCREEN 5: VAANI VIEWPORT (Hands-Free Voice Assistant Interface)
+    ============================================================ -->
+    <div class="screen" id="screenVaani">
+        <div class="vaani-layout">
+            <div class="vaani-mic-indicator focus-outline" id="vaaniMicIcon" onclick="toggleVaaniMic()" role="button" tabindex="0" aria-label="Voice menu microphone indicator. Press Enter to pause/resume listening.">
+                <img src="assets/vaani_icon.png" alt="Microphone">
+            </div>
+            <h2 id="vaaniStatusText" style="margin-bottom: 12px; font-weight: 700;">Hands-Free Guided Selection</h2>
+            <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.6;">
+                Listen to the voice instructions. Speak <strong>"Drishti"</strong>, <strong>"Shravan"</strong>, or <strong>"Dhyan"</strong> to switch learning modes.
+            </p>
+        </div>
+    </div>
+    
+    <!-- ============================================================
+    SETTINGS MODAL
+    ============================================================ -->
+    <div class="modal-overlay" id="settingsModal" onclick="closeSettingsOnOverlay(event)">
+        <div class="modal" onclick="event.stopPropagation()">
+            <h3>Settings</h3>
+            <label for="geminiKeyInput" style="display: block; margin-bottom: 8px; font-size: 0.9rem; font-weight: 600; color: var(--text-muted);">API Key (Gemini or Groq)</label>
+            <input type="password" id="geminiKeyInput" placeholder="Paste your Gemini or Groq key here">
+            <p style="font-size: 0.8rem; color: var(--text-light); margin-bottom: 20px; line-height: 1.5;">
+                Groq keys start with 'gsk_'. If no key is configured or you are offline, heuristic summary fallbacks will be used automatically.
+            </p>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeSettings()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveSettings()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden audio text logger for screen readers -->
+    <div id="shravanHiddenTranscript" aria-hidden="true" style="display: none;"></div>
+
+    <!-- Core Scripts (Separate files for professional architecture) -->
+    <script src="js/config.js?v=3"></script>
+    <script src="js/jargon.js?v=3"></script>
+    <script src="js/app.js?v=3"></script>
+    
+    <div id="toast" class="toast"></div>
+</body>
+</html>
