@@ -35,6 +35,9 @@ function goHome() {
     stopDemo();
     stopVoiceCommands();
     stopVaaniMenuListener();
+    stopAutoSave();
+    localStorage.removeItem('saral_backup');
+    
     switchScreen('screenHome');
     document.getElementById('header').style.display = 'none';
     activeMode = '';
@@ -1094,7 +1097,8 @@ function loadBackup() {
     if (backup) {
         try {
             const data = JSON.parse(backup);
-            if (Date.now() - data.time < 3600000) { // 1 hour threshold
+            // Must have a valid mode, and be less than 1 hour old
+            if (data && data.mode && data.mode !== '' && Date.now() - data.time < 3600000) { 
                 return data;
             }
         } catch(e) {}
@@ -1486,7 +1490,7 @@ function initDefectOnboarding() {
             startVoiceDefectDetection(true);
         });
     }, 500);
-    
+
     // Update countdown element initially
     const countdownEl = document.getElementById('defectTimerCountdown');
     if (countdownEl) countdownEl.textContent = defectCountdown;
